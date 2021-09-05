@@ -52,13 +52,21 @@ func main() {
 
 	// retrieving lists:
 	fmt.Println("<< Loading lists ...")
-	lists, err := auth.LoadLists()
+	lists, err := auth.LoadListsExpensive()
 	if err != nil {
 		log.Fatalln(err)
 		return
 	}
 	for _, l := range lists {
-		fmt.Printf(">> %+v\n", l)
+		fmt.Printf(">> %s\n", l.Name)
+		fmt.Println("  Purchase:")
+		for _, i := range l.Purchase {
+			fmt.Println("    (", i.Name, "::", i.Specification, ")")
+		}
+		fmt.Println("  Recently:")
+		for _, r := range l.Recently {
+			fmt.Println("    (", r.Name, "::", r.Specification, ")")
+		}
 	}
 
 }

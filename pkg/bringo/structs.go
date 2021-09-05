@@ -13,8 +13,25 @@ type bringAuth struct {
 	ExpiresIn     int    `json:"expires_in"`
 }
 
-type BringList struct {
+type BringListMeta struct {
 	UUID  string `json:"listUuid"`
 	Name  string `json:"name"`
 	Theme string `json:"theme"`
+}
+
+type BringItem struct {
+	Specification string `json:"specification"`
+	Name          string `json:"name"`
+}
+
+type BringList struct {
+	UUID     string       `json:"uuid"`
+	Status   string       `json:"status"`
+	Purchase []*BringItem `json:"purchase"`
+	Recently []*BringItem `json:"recently"`
+}
+
+type BringListExpensive struct {
+	*BringListMeta
+	*BringList
 }
