@@ -12,3 +12,9 @@ type bringAuth struct {
 	TokenType     string `json:"token_type"`
 	ExpiresIn     int    `json:"expires_in"`
 }
+
+type BringList struct {
+	UUID  string `json:"listUuid"`
+	Name  string `json:"name"`
+	Theme string `json:"theme"`
+}

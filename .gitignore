@@ -118,3 +118,4 @@ modules.xml
 
 # for test-cli (cmd/bringo/bringo_test.go)
 /creds.json
+/cache.json

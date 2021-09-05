@@ -9,18 +9,30 @@ const (
 	DefaultBaseURL = "https://api.getbring.com/rest/v2/"
 )
 
+///
+
+func createHeaders(h req.Header) (resp req.Header) {
+	resp = DefaultHeaders
+	for k, v := range h {
+		resp[k] = v
+	}
+	return
+}
+
+///
+
 var (
 	ErrNotInvalidCredentials = errors.New("invalid credentials")
 	ErrInvalidResponse       = errors.New("invalid response")
 )
 
 type Bringo struct {
-	base string
+	Base string `json:"base"`
 }
 
 type AuthBringo struct {
-	auth *bringAuth
-	Dog  *expireDog
+	*Bringo `json:"bringo"`
+	Auth    *bringAuth `json:"auth"`
 }
 
 ///
@@ -31,52 +43,12 @@ func New() *Bringo {
 
 func NewWithBaseURL(base string) *Bringo {
 	return &Bringo{
-		base: base,
+		Base: base,
 	}
 }
 
 func NewWithLogin(email, pass string) (a *AuthBringo, err error) {
 	guest := New()
 	a, err = guest.Login(email, pass)
-	return
-}
-
-///
-
-func (a *AuthBringo) Close() error {
-	if a.Dog != nil {
-		a.Dog.Stop()
-	}
-	return nil
-}
-
-///
-
-func (b *Bringo) Login(email, password string) (a *AuthBringo, err error) {
-	var resp *req.Resp
-	if resp, err = req.Post(b.base+"bringauth", req.Param{
-		"email":    email,
-		"password": password,
-	}); err != nil {
-		return
-	}
-	// status code should be 200
-	if resp.Response().StatusCode != 200 {
-		if resp.Response().StatusCode == 401 {
-			err = ErrNotInvalidCredentials
-		} else {
-			err = ErrInvalidResponse
-		}
-		return
-	}
-	a = new(AuthBringo)
-	// parse json response to `AuthBringo` struct
-	if err = resp.ToJSON(&a.auth); err != nil {
-		return
-	}
-	// update `Expires` field
-	if a.auth.ExpiresIn > 0 {
-		a.Dog = newExpireDog(a.auth.ExpiresIn)
-	}
 	return
 }
