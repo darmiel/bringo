@@ -21,32 +21,32 @@ func (a *AuthBringo) createHeaders() req.Header {
 
 ///
 
-type loadListsModel struct {
+type getListMetasModel struct {
 	Lists []*BringListMeta
 }
 
-func (a *AuthBringo) LoadLists() (lists []*BringListMeta, err error) {
+func (a *AuthBringo) GetListMetas() (lists []*BringListMeta, err error) {
 	url := fmt.Sprintf("%s/bringusers/%s/lists", a.Base, a.Auth.UUID)
 	var resp *req.Resp
 	if resp, err = req.Get(url, a.createHeaders()); err != nil {
 		return
 	}
-	var model loadListsModel
+	var model getListMetasModel
 	if err = resp.ToJSON(&model); err != nil {
 		return
 	}
 	return model.Lists, nil
 }
 
-func (a *AuthBringo) LoadListsExpensive() (lists []*BringListExpensive, err error) {
+func (a *AuthBringo) GetLists() (lists []*BringListExpensive, err error) {
 	var meta []*BringListMeta
-	if meta, err = a.LoadLists(); err != nil {
+	if meta, err = a.GetListMetas(); err != nil {
 		return
 	}
 	lists = make([]*BringListExpensive, len(meta))
 	for i, m := range meta {
 		var list *BringList
-		if list, err = a.GetList(m.UUID); err != nil {
+		if list, err = a.GetListByMeta(m); err != nil {
 			return
 		}
 		lists[i] = &BringListExpensive{
@@ -58,6 +58,10 @@ func (a *AuthBringo) LoadListsExpensive() (lists []*BringListExpensive, err erro
 }
 
 ///
+
+func (a *AuthBringo) GetListByMeta(meta *BringListMeta) (list *BringList, err error) {
+	return a.GetList(meta.UUID)
+}
 
 func (a *AuthBringo) GetList(listUUID string) (list *BringList, err error) {
 	url := fmt.Sprintf("%s/bringlists/%s", a.Base, listUUID)

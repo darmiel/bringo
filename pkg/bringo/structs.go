@@ -35,3 +35,13 @@ type BringListExpensive struct {
 	*BringListMeta
 	*BringList
 }
+
+type BringItemDetails struct {
+	UUID           string `json:"uuid"`
+	ItemID         string `json:"itemId"`
+	ListUUID       string `json:"listUuid"`
+	UserIconItemID string `json:"userIconItemId"`
+	UserSectionID  string `json:"userSectionId"`
+	AssignedTo     string `json:"assignedTo"`
+	ImageURL       string `json:"imageUrl"`
+}

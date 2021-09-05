@@ -52,7 +52,7 @@ func main() {
 
 	// retrieving lists:
 	fmt.Println("<< Loading lists ...")
-	lists, err := auth.LoadListsExpensive()
+	lists, err := auth.GetLists()
 	if err != nil {
 		log.Fatalln(err)
 		return
