@@ -116,6 +116,6 @@ modules.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/go,intellij+all
 
-# for test-cli (cmd/bringo/bringo_test.go)
+# for test-cli (cmd/bringotest/bringo_test.go)
 /creds.json
 /cache.json

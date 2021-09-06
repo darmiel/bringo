@@ -1,25 +1,16 @@
-package main
+package bringotest
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/darmiel/bringo/pkg/bringo"
-	"log"
 	"os"
 )
 
-type creds struct {
-	Email    string `json:"email"`
-	Password string `json:"pass"`
-}
-
-func main() {
-	fmt.Println("bringo! Test CLI")
-
+func GetAuth() (auth *bringo.AuthBringo) {
 	var (
-		err  error
 		data []byte
-		auth *bringo.AuthBringo
+		err  error
 	)
 
 	// from cache?
@@ -48,25 +39,10 @@ func main() {
 			}
 		}
 	}
-	fmt.Printf("  >> Auth obj (%v): %+v\n", err, auth)
+	return
+}
 
-	// retrieving lists:
-	fmt.Println("<< Loading lists ...")
-	lists, err := auth.GetLists()
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-	for _, l := range lists {
-		fmt.Printf(">> %s\n", l.Name)
-		fmt.Println("  Purchase:")
-		for _, i := range l.Purchase {
-			fmt.Println("    (", i.Name, "::", i.Specification, ")")
-		}
-		fmt.Println("  Recently:")
-		for _, r := range l.Recently {
-			fmt.Println("    (", r.Name, "::", r.Specification, ")")
-		}
-	}
-
+type creds struct {
+	Email    string `json:"email"`
+	Password string `json:"pass"`
 }
