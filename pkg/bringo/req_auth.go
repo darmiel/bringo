@@ -72,3 +72,23 @@ func (a *AuthBringo) GetList(listUUID string) (list *BringList, err error) {
 	err = resp.ToJSON(&list)
 	return
 }
+
+func (a *AuthBringo) SaveItemByMeta(list *BringListMeta, itemName, specification string) error {
+	return a.SaveItem(list.UUID, itemName, specification)
+}
+
+func (a *AuthBringo) SaveItem(listUUID, itemName, specification string) (err error) {
+	url := fmt.Sprintf("%s/bringlists/%s", a.Base, listUUID)
+	param := req.Param{
+		"purchase":      itemName,
+		"specification": specification,
+	}
+	var resp *req.Resp
+	if resp, err = req.Put(url, param, a.createHeaders()); err != nil {
+		return
+	}
+	if resp.Response().StatusCode != 204 {
+		err = fmt.Errorf("cannot save item. status %v", resp.Response().StatusCode)
+	}
+	return
+}
