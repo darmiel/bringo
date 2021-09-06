@@ -1,4 +1,5 @@
 # bringo!
+
 Simple unofficial [bring!](https://web.getbring.com/) API-wrapper written in Go
 
 ## Usage
@@ -9,53 +10,45 @@ bring, err := bringo.NewWithLogin("my@email.com", "my password")
 
 ### Get All Lists (Meta)
 
-**Type:**
+Returns the name, UUID and theme of all lists. However, **this request does not include any items in the list.**
+To also get the items in a list, use `GetList(listUUID string)` or `GetLists()`.
 
 ```go
-UUID  string `json:"listUuid"`
-Name  string `json:"name"`
-Theme string `json:"theme"`
-```
-
-**Request:**
-
-```go
-meta, err := bring.GetListMetas()
+var (
+    meta []*bring.BringListMeta
+    err error
+)
+meta, err = bring.GetListMetas()
 for _, m := range meta {
 // ...
 }
 ```
 
-### Get All Lists (Full)
-(combines `GetLists()` and `GetList(listUUID string)`)
-**Type:**
+### Get Single List By ID
+
+Returns the UUID, the status, items to buy and previous items.
+
 ```go
-UUID     string       `json:"listUuid"`
-Name     string       `json:"name"`
-Theme    string       `json:"theme"`
-UUID     string       `json:"uuid"`
-Status   string       `json:"status"`
-Purchase []*BringItem `json:"purchase"`
-Recently []*BringItem `json:"recently"
+var (
+    list *bring.BringList
+    err error
+)
+list, err = bring.GetList("ffffffff-ffff-ffff-ffff-ffffffffffff")
+// ...
 ```
-**Request:**
+
+### Get All Lists (Full)
+
+combines `GetLists()` and `GetList(listUUID string)`
+
 ```go
-lists, err := bring.GetLists()
+var (
+    lists []*bring.BringListExpensive
+    err error
+)
+lists, err = bring.GetLists()
 for _, l := range lists {
-	// ...
+    // ...
 }
 ```
 
-### Get Single List By ID
-**Type:**
-```go
-UUID     string       `json:"uuid"`
-Status   string       `json:"status"`
-Purchase []*BringItem `json:"purchase"`
-Recently []*BringItem `json:"recently"`
-```
-**Request:**
-```go
-list, err := bring.GetList("ffffffff-ffff-ffff-ffff-ffffffffffff")
-// ...
-```
