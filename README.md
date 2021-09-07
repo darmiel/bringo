@@ -20,7 +20,7 @@ var (
 )
 meta, err = bring.GetListMetas()
 for _, m := range meta {
-// ...
+    // ...
 }
 ```
 
@@ -52,3 +52,14 @@ for _, l := range lists {
 }
 ```
 
+### Create/Save a new item
+SaveItem(listUUID, itemName, specification string
+```go
+var (
+	err error
+	listUUID = "ffffffff-ffff-ffff-ffff-ffffffffffff"
+	itemName = "Butter"
+	specification = ""
+)
+err = bring.SaveItem(listUUID, itemName, specification string)
+```
